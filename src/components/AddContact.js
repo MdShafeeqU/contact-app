@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddContactForm = ({ addContactHandler }) => {
     const [state, setState] = useState({
@@ -32,6 +32,9 @@ const AddContactForm = ({ addContactHandler }) => {
                     <input type="text" name="email" placeholder="Email" value={state.email} onChange={(e) => setState({ email: e.target.value })} />
                 </div>
                 <button className="ui button blue">Add</button>
+                <Link to="/">
+                    <button className="ui button blue">View Contact List</button>
+                </Link>
             </form>
         </div>
     );
