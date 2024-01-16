@@ -18,7 +18,6 @@ const ContactList = (props) => {
         <div class="main">
             <h2>
                 Contact List
-                
             </h2>
             <Link to = "/add">
                 <button className="ui button blue right">Add Contact</button>
