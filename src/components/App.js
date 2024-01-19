@@ -11,11 +11,10 @@ import api from "../api/contacts"
 
 function App() {
   const LOCAL_STORAGE_KEY = "contacts";
-  const [contacts, setContacts] = useState(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) ?? []
-  );
+  const [contacts, setContacts] = useState([]);
   // const [contacts, setContacts] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   // Retrieve Contact
   const retriveContacts = async () => {
     const response = await api.get("/contacts");
@@ -57,6 +56,18 @@ function App() {
     setContacts(newContactList);
   };
 
+  const searchHandler =(searchTerm)=>{
+    setSearchTerm(searchTerm);
+    if (searchTerm !== ""){
+      const newContactList = contacts.filter((contact)=>{
+        return Object.values(contact).join("").toLowerCase().includes(searchTerm.toLowerCase());
+      });
+      setSearchResults(newContactList);
+    }
+    else{
+      setSearchResults(contacts);
+    }
+  };
   // Get the data from local storage
   useEffect(() => {
     // const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -75,6 +86,7 @@ function App() {
     // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
   }, [contacts]); //dependency
 
+  
   return (
     <div className="ui container">
       <Router>
@@ -90,7 +102,7 @@ function App() {
               />
             }}
           /> */}
-          <Route path="/" element={<ContactList contacts={contacts} getContactId={removeContactHandler} />} />
+          <Route path="/" element={<ContactList contacts={searchTerm.length < 1 ? contacts: searchResults} getContactId={removeContactHandler} term = {searchTerm} searchKeyword={searchHandler} />} />
           <Route path="/add" element={<AddContact addContactHandler={addContactHandler} />} />
           <Route path="/contact/:id" element={<ContactDetail contact={contacts} /> }/>
           <Route path="/edit/:id" element={<EditContact editContactHandler={editContactHandler} contact={contacts}/>} />
